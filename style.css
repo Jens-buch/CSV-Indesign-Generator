@@ -1,0 +1,24 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+.field-group,
+.record-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.field-group input,
+.record-row input {
+  padding: 4px;
+}
+
+button {
+  padding: 6px 12px;
+}
+
+.records {
+  margin-top: 20px;
+}
