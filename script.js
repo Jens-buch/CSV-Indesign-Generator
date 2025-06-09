@@ -80,7 +80,10 @@ function lockFields() {
 function addRecord(data = {}) {
   const container = document.getElementById('records');
   const row = document.createElement('div');
-  row.className = 'flex gap-4 mb-4 items-end record-row';
+  row.className = 'record-row overflow-x-auto';
+
+  const inner = document.createElement('div');
+  inner.className = 'flex gap-4 min-w-max items-end';
 
   fields.forEach(field => {
     const isImageField = field.startsWith('@');
@@ -90,12 +93,12 @@ function addRecord(data = {}) {
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
-    input.className = 'bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
+    input.className = 'w-48 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
     input.value = data[field] || '';
 
     label.appendChild(input);
-    row.appendChild(label);
+    inner.appendChild(label);
   });
 
   const deleteBtn = document.createElement('button');
@@ -106,7 +109,8 @@ function addRecord(data = {}) {
     saveToLocalStorage();
   };
 
-  row.appendChild(deleteBtn);
+  inner.appendChild(deleteBtn);
+  row.appendChild(inner);
   container.appendChild(row);
   saveToLocalStorage();
 }
@@ -121,8 +125,9 @@ function exportCSV() {
   }
 
   recordDivs.forEach(div => {
+    const inner = div.querySelector('div'); // .inner container
     const row = fields.map(field => {
-      const input = div.querySelector(`input[data-field='${field}']`);
+      const input = inner.querySelector(`input[data-field='${field}']`);
       return (input?.value || '').replace(/\t/g, ' ').replace(/\r?\n/g, ' ');
     });
     rows.push(row);
@@ -169,9 +174,10 @@ function saveToLocalStorage() {
 
   const records = [];
   document.querySelectorAll('.record-row').forEach(row => {
+    const inner = row.querySelector('div');
     const record = {};
     fields.forEach(field => {
-      const input = row.querySelector(`input[data-field='${field}']`);
+      const input = inner.querySelector(`input[data-field='${field}']`);
       record[field] = input?.value || '';
     });
     records.push(record);
