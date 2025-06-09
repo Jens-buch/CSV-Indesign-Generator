@@ -237,25 +237,25 @@ window.addEventListener('DOMContentLoaded', loadFromLocalStorage);
 
 
 const guideContent = {
-    existing: `
-      <p><strong>Step 1:</strong> Open your InDesign document.</p>
-      <p><strong>Step 2:</strong> Go to <em>Window > Utilities > Data Merge</em>.</p>
-      <p><strong>Step 3:</strong> Select your exported file (.txt or .csv) as the data source.</p>
-      <p><strong>Step 4:</strong> Link fields and insert placeholders. Preview and export when ready.</p>
-    `,
-    new: `
-      <p><strong>Step 1:</strong> Create a new InDesign document.</p>
-      <p><strong>Step 2:</strong> Set up text/image placeholders where your dynamic content will go.</p>
-      <p><strong>Step 3:</strong> Use <em>Window > Utilities > Data Merge</em> to load the exported file.</p>
-      <p><strong>Step 4:</strong> Drag data fields into your layout. Preview and export when ready.</p>
-    `
-  };
+  existing: `
+    <p><strong>Step 1:</strong> Open your InDesign document.</p>
+    <p><strong>Step 2:</strong> Go to <em>Window > Utilities > Data Merge</em>.</p>
+    <p><strong>Step 3:</strong> Select your exported file as the data source.</p>
+    <p><strong>Step 4:</strong> Insert data fields, preview, and export.</p>
+  `,
+  new: `
+    <p><strong>Step 1:</strong> Create a new InDesign document.</p>
+    <p><strong>Step 2:</strong> Set up your layout with placeholders.</p>
+    <p><strong>Step 3:</strong> Load the exported data file using <em>Data Merge</em>.</p>
+    <p><strong>Step 4:</strong> Insert fields, preview, and generate variations.</p>
+  `
+};
 
-  function openGuide(type) {
-    document.getElementById('guideContent').innerHTML = guideContent[type] || '';
-    document.getElementById('guidePanel').classList.remove('translate-x-full');
-  }
+function openGuide(type) {
+  document.getElementById('guideContent').innerHTML = guideContent[type] || '';
+  document.getElementById('guidePanel').classList.remove('translate-x-full');
+}
 
-  function closeGuide() {
-    document.getElementById('guidePanel').classList.add('translate-x-full');
-  }
+function closeGuide() {
+  document.getElementById('guidePanel').classList.add('translate-x-full');
+}

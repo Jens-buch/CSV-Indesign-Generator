@@ -52,7 +52,7 @@
     <!-- Step 1 -->
     <div class="space-y-4 mb-8">
       <h2 class="text-lg font-semibold text-white text-center">Step 1: Give your list a name</h2>
-      <p class="text-base text-gray-400 mb-4 text-center">Type a name that describes your items, e.g., "Products", "Team Members", or "Event Sessions".</p>
+      <p class="text-base text-gray-400 mb-4 text-center">Type a name that describes your items, e.g., "Products", "Destinations", or "Event Sessions".</p>
       <input type="text" id="itemType" placeholder="e.g. Product"
       class="mt-1 w-full border border-white/10 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4 focus:outline-none focus:ring focus:border-blue-400" />
       <button id="startBtn" onclick="setItemType()"
@@ -136,7 +136,8 @@
   </div>
 </div>
 <!-- Guide to indesign - Panels -->
-<div id="guidePanel" class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-black text-white p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+<div id="guidePanel"
+  class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-black text-white p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-lg font-semibold">How to use in InDesign</h2>
     <button onclick="closeGuide()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -145,6 +146,7 @@
     <!-- JS inserts content here -->
   </div>
 </div>
+
 
 <script src="script.js"></script>
 </body>
