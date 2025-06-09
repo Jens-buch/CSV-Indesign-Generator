@@ -293,3 +293,29 @@ function clearLocalStorage() {
 window.addEventListener('DOMContentLoaded', () => {
   loadFromLocalStorage();
 });
+
+function clearSession() {
+  localStorage.removeItem('csvBuilderData');
+
+  // Clear all dynamic sections
+  document.getElementById('itemType').value = '';
+  document.getElementById('itemType').disabled = false;
+
+  document.getElementById('fieldInputs').innerHTML = '';
+  document.getElementById('records').innerHTML = '';
+
+  fields = [];
+
+  // Reset buttons
+  const startBtn = document.getElementById('startBtn');
+  startBtn.textContent = 'Next';
+  startBtn.onclick = setItemType;
+
+  // Show only step 1, hide others
+  document.getElementById('fieldSetup').classList.add('hidden');
+  document.getElementById('recordSection').classList.add('hidden');
+
+  // Optionally scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
