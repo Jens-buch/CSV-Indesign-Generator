@@ -6,6 +6,9 @@ function setItemType() {
   const btn = document.getElementById('startBtn');
   btn.textContent = 'Edit List Name';
   btn.onclick = editItemType;
+
+  // ✅ Add one default empty field
+  addField();
 }
 
 function editItemType() {
@@ -238,18 +241,19 @@ window.addEventListener('DOMContentLoaded', loadFromLocalStorage);
 
 const guideContent = {
   existing: `
-    <p><strong>Step 1:</strong> Open your InDesign document.</p>
-    <p><strong>Step 2:</strong> Go to <em>Window > Utilities > Data Merge</em>.</p>
-    <p><strong>Step 3:</strong> Select your exported file as the data source.</p>
-    <p><strong>Step 4:</strong> Insert data fields, preview, and export.</p>
+    <p><strong>Step 1:</strong> Launch InDesign and open your <code>.indd</code> file.</p>
+    <p><strong>Step 2:</strong> Go to <em>Window → Utilities → Data Merge</em>. From the panel menu (☰), choose <strong>Select Data Source...</strong> and select your <code>.csv</code> file.</p>
+    <p><strong>Step 3:</strong> Click into a text frame, then click a field name in the Data Merge panel (e.g. <code>&lt;&lt;Title&gt;&gt;</code>). Do the same for other fields. For images, create an image frame, click it, then insert the image field (e.g. <code>&lt;&lt;ImageURL&gt;&gt;</code>).</p>
+    <p><strong>Step 4:</strong> Toggle <strong>Preview</strong> in the Data Merge panel to see results. Go to <strong>Create Merged Document...</strong> or <strong>Export to PDF</strong> via <em>File → Export</em>.</p>
   `,
   new: `
-    <p><strong>Step 1:</strong> Create a new InDesign document.</p>
-    <p><strong>Step 2:</strong> Set up your layout with placeholders.</p>
-    <p><strong>Step 3:</strong> Load the exported data file using <em>Data Merge</em>.</p>
-    <p><strong>Step 4:</strong> Insert fields, preview, and generate variations.</p>
+    <p><strong>Step 1:</strong> Create a new InDesign document and set up your page size, margins, and layout.</p>
+    <p><strong>Step 2:</strong> Open the <em>Data Merge</em> panel via <em>Window → Utilities → Data Merge</em>, then choose <strong>Select Data Source...</strong> to load your <code>.csv</code> file.</p>
+    <p><strong>Step 3:</strong> Add text and image frames to your layout. Insert merge fields by clicking the frame, then selecting a field from the panel (e.g. <code>&lt;&lt;Title&gt;&gt;</code>, <code>&lt;&lt;ImageURL&gt;&gt;</code>).</p>
+    <p><strong>Step 4:</strong> Use <strong>Preview</strong> to check how records look, then generate the final output with <strong>Create Merged Document...</strong> or export as PDF.</p>
   `
 };
+
 
 function openGuide(type) {
   document.getElementById('guideContent').innerHTML = guideContent[type] || '';
