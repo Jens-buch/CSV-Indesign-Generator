@@ -1,24 +1,20 @@
 let fields = [];
 
 function setItemType() {
-  const itemTypeInput = document.getElementById('itemType');
-  const startBtn = document.getElementById('startBtn');
-
-  itemTypeInput.disabled = true;
+  document.getElementById('itemType').disabled = true;
   document.getElementById('fieldSetup').classList.remove('hidden');
-  startBtn.textContent = 'Edit';
-  startBtn.onclick = editItemType;
+  const btn = document.getElementById('startBtn');
+  btn.textContent = 'Edit';
+  btn.onclick = editItemType;
 }
 
 function editItemType() {
-  const itemTypeInput = document.getElementById('itemType');
-  const startBtn = document.getElementById('startBtn');
-
-  itemTypeInput.disabled = false;
+  document.getElementById('itemType').disabled = false;
   document.getElementById('fieldSetup').classList.add('hidden');
   document.getElementById('recordSection').classList.add('hidden');
-  startBtn.textContent = 'Next';
-  startBtn.onclick = setItemType;
+  const btn = document.getElementById('startBtn');
+  btn.textContent = 'Next';
+  btn.onclick = setItemType;
 }
 
 function addField() {
@@ -28,10 +24,10 @@ function addField() {
 
   const nameInput = document.createElement('input');
   nameInput.placeholder = 'Field name';
-  nameInput.className = 'flex-1 border border-gray-300 rounded px-3 py-2';
+  nameInput.className = 'flex-1 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
 
   const typeSelect = document.createElement('select');
-  typeSelect.className = 'border border-gray-300 rounded px-2 py-2 text-sm';
+  typeSelect.className = 'border border-gray-600 bg-gray-700 text-white rounded px-2 py-2 text-sm';
   ['Text', 'Image path'].forEach(type => {
     const opt = document.createElement('option');
     opt.value = type;
@@ -64,13 +60,8 @@ function lockFields() {
     const typeSelect = wrapper.querySelector('select');
     const name = nameInput?.value.trim();
     const type = typeSelect?.value;
-
-    if (!name) return;
-
-    if (type === 'Image path') {
-      fields.push('@' + name);
-    } else {
-      fields.push(name);
+    if (name) {
+      fields.push(type === 'Image path' ? '@' + name : name);
     }
   });
 
@@ -86,29 +77,25 @@ function lockFields() {
   saveToLocalStorage();
 }
 
-function addRecord() {
+function addRecord(data = {}) {
   const container = document.getElementById('records');
   const row = document.createElement('div');
   row.className = 'flex gap-4 mb-4 items-end record-row';
 
   fields.forEach(field => {
     const isImageField = field.startsWith('@');
-
-    const wrapper = document.createElement('div');
-    wrapper.className = 'flex flex-col flex-1';
-
     const label = document.createElement('label');
+    label.className = 'flex flex-col flex-1 text-sm font-medium text-gray-200';
     label.textContent = field.replace(/^@/, '');
-    label.className = 'text-sm font-medium text-gray-700 mb-1';
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
+    input.className = 'border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
-    input.className = 'border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400';
+    input.value = data[field] || '';
 
-    wrapper.appendChild(label);
-    wrapper.appendChild(input);
-    row.appendChild(wrapper);
+    label.appendChild(input);
+    row.appendChild(label);
   });
 
   const deleteBtn = document.createElement('button');
@@ -121,7 +108,6 @@ function addRecord() {
 
   row.appendChild(deleteBtn);
   container.appendChild(row);
-
   saveToLocalStorage();
 }
 
@@ -135,27 +121,23 @@ function exportCSV() {
   }
 
   recordDivs.forEach(div => {
-    const row = [];
-    fields.forEach(field => {
+    const row = fields.map(field => {
       const input = div.querySelector(`input[data-field='${field}']`);
-      const value = input?.value.trim().replace(/\t/g, ' ').replace(/\r?\n/g, ' ') || '';
-      row.push(value);
+      return (input?.value || '').replace(/\t/g, ' ').replace(/\r?\n/g, ' ');
     });
     rows.push(row);
   });
 
   const content = rows.map(r => r.join('\t')).join('\r\n') + '\r\n';
-
   const buffer = new ArrayBuffer(2 + content.length * 2);
   const view = new DataView(buffer);
   view.setUint16(0, 0xFEFF, true); // BOM
 
   for (let i = 0; i < content.length; i++) {
-    view.setUint16(2 + i * 2, content.charCodeAt(i), true); // UTF-16LE
+    view.setUint16(2 + i * 2, content.charCodeAt(i), true);
   }
 
   const blob = new Blob([buffer], { type: 'text/plain;charset=utf-16le' });
-
   const itemType = document.getElementById('itemType').value.trim() || 'data-list';
   const today = new Date().toISOString().split('T')[0];
   const filename = `${itemType.replace(/\s+/g, '-').toLowerCase()}-${today}.txt`;
@@ -177,7 +159,6 @@ function editFields() {
 function saveToLocalStorage() {
   const itemType = document.getElementById('itemType').value.trim();
   const fieldDefs = [];
-
   document.querySelectorAll('#fieldInputs > .flex').forEach(wrapper => {
     const nameInput = wrapper.querySelector('input');
     const typeSelect = wrapper.querySelector('select');
@@ -196,8 +177,7 @@ function saveToLocalStorage() {
     records.push(record);
   });
 
-  const data = { itemType, fieldDefs, records };
-  localStorage.setItem('csvBuilderData', JSON.stringify(data));
+  localStorage.setItem('csvBuilderData', JSON.stringify({ itemType, fieldDefs, records }));
 }
 
 function loadFromLocalStorage() {
@@ -217,15 +197,15 @@ function loadFromLocalStorage() {
 
     const nameInput = document.createElement('input');
     nameInput.value = name;
-    nameInput.className = 'flex-1 border border-gray-300 rounded px-3 py-2';
+    nameInput.className = 'flex-1 border border-gray-600 bg-gray-700 text-white rounded px-3 py-2';
 
     const typeSelect = document.createElement('select');
-    typeSelect.className = 'border border-gray-300 rounded px-2 py-2 text-sm';
-    ['Text', 'Image path'].forEach(option => {
+    typeSelect.className = 'border border-gray-600 bg-gray-700 text-white rounded px-2 py-2 text-sm';
+    ['Text', 'Image path'].forEach(optType => {
       const opt = document.createElement('option');
-      opt.value = option;
-      opt.textContent = option;
-      if (option === type) opt.selected = true;
+      opt.value = optType;
+      opt.textContent = optType;
+      if (optType === type) opt.selected = true;
       typeSelect.appendChild(opt);
     });
 
@@ -245,77 +225,72 @@ function loadFromLocalStorage() {
 
   lockFields();
   document.getElementById('records').innerHTML = '';
-
-  data.records.forEach(record => {
-    const container = document.getElementById('records');
-    const row = document.createElement('div');
-    row.className = 'flex gap-4 mb-4 items-end record-row';
-
-    fields.forEach(field => {
-      const isImageField = field.startsWith('@');
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'flex flex-col flex-1';
-
-      const label = document.createElement('label');
-      label.textContent = field.replace(/^@/, '');
-      label.className = 'text-sm font-medium text-gray-700 mb-1';
-
-      const input = document.createElement('input');
-      input.setAttribute('data-field', field);
-      input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
-      input.className = 'border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400';
-      input.value = record[field] || '';
-
-      wrapper.appendChild(label);
-      wrapper.appendChild(input);
-      row.appendChild(wrapper);
-    });
-
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Remove';
-    deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
-    deleteBtn.onclick = () => {
-      container.removeChild(row);
-      saveToLocalStorage();
-    };
-
-    row.appendChild(deleteBtn);
-    container.appendChild(row);
-  });
+  data.records.forEach(record => addRecord(record));
 }
 
-function clearLocalStorage() {
+function clearSession() {
   localStorage.removeItem('csvBuilderData');
   location.reload();
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  loadFromLocalStorage();
-});
+function handleCSVUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
 
-function clearSession() {
-  localStorage.removeItem('csvBuilderData');
+  const reader = new FileReader();
+  reader.onload = e => {
+    const text = e.target.result;
+    const lines = text.trim().split(/\r\n|\n/);
+    const header = lines[0].split(/\t|,/);
+    const isImageField = field => field.startsWith('@') || field.toLowerCase().includes('image');
 
-  // Clear all dynamic sections
-  document.getElementById('itemType').value = '';
-  document.getElementById('itemType').disabled = false;
+    // Reset everything
+    document.getElementById('fieldInputs').innerHTML = '';
+    header.forEach(name => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex gap-2 items-center';
 
-  document.getElementById('fieldInputs').innerHTML = '';
-  document.getElementById('records').innerHTML = '';
+      const input = document.createElement('input');
+      input.value = name.replace(/^@/, '');
+      input.className = 'flex-1 border border-gray-600 bg-gray-700 text-white px-3 py-2';
 
-  fields = [];
+      const select = document.createElement('select');
+      select.className = 'border border-gray-600 bg-gray-700 text-white px-2 py-2 text-sm';
+      ['Text', 'Image path'].forEach(type => {
+        const opt = document.createElement('option');
+        opt.value = type;
+        opt.textContent = type;
+        if (isImageField(name) && type === 'Image path') opt.selected = true;
+        select.appendChild(opt);
+      });
 
-  // Reset buttons
-  const startBtn = document.getElementById('startBtn');
-  startBtn.textContent = 'Next';
-  startBtn.onclick = setItemType;
+      const btn = document.createElement('button');
+      btn.textContent = 'Remove';
+      btn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
+      btn.onclick = () => wrapper.remove();
 
-  // Show only step 1, hide others
-  document.getElementById('fieldSetup').classList.add('hidden');
-  document.getElementById('recordSection').classList.add('hidden');
+      wrapper.appendChild(input);
+      wrapper.appendChild(select);
+      wrapper.appendChild(btn);
+      document.getElementById('fieldInputs').appendChild(wrapper);
+    });
 
-  // Optionally scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('itemType').value = file.name.replace(/\.[^/.]+$/, '');
+    setItemType();
+
+    lockFields();
+    document.getElementById('records').innerHTML = '';
+
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(/\t|,/);
+      const record = {};
+      header.forEach((field, j) => {
+        record[field] = values[j] || '';
+      });
+      addRecord(record);
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
 }
 
+window.addEventListener('DOMContentLoaded', loadFromLocalStorage);

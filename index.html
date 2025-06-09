@@ -5,28 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data List Builder for InDesign</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-6 space-y-6">
-  <div class="bg-white rounded-lg p-8 w-full max-w-5xl">
-    <h1 class="text-2xl font-bold text-gray-800 mb-2">Data List Builder for InDesign</h1>
-    <p class="text-sm text-gray-600 mb-6">
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-6 space-y-6">
+  <div class="bg-gray-800 rounded-lg p-8 w-full max-w-5xl shadow-xl">
+    <h1 class="text-2xl font-bold text-white mb-2">Data List Builder for InDesign</h1>
+    <p class="text-sm text-gray-300 mb-6">
       Easily build a list of items to import into InDesign using this step-by-step tool. No spreadsheet knowledge required.
     </p>
 
     <!-- Upload Option -->
     <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium text-gray-700">Upload a CSV file (optional)</label>
+      <label class="block mb-2 text-sm font-medium text-gray-200">Upload a CSV file (optional)</label>
       <input type="file" accept=".csv" onchange="handleCSVUpload(event)"
-        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        class="block w-full text-sm border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500" />
     </div>
 
     <!-- Step 1 -->
     <div class="space-y-4 mb-8">
-      <h2 class="text-lg font-semibold text-gray-700">Step 1: What are you creating a list of?</h2>
-      <p class="text-sm text-gray-500">Type a name that describes your items, e.g., "Products", "Team Members", or "Event Sessions".</p>
+      <h2 class="text-lg font-semibold text-white">Step 1: What are you creating a list of?</h2>
+      <p class="text-sm text-gray-400">Type a name that describes your items, e.g., "Products", "Team Members", or "Event Sessions".</p>
 
       <input type="text" id="itemType" placeholder="e.g. Product"
-        class="mt-1 w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
+        class="mt-1 w-full border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400" />
 
       <button id="startBtn" onclick="setItemType()"
         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Next</button>
@@ -34,8 +35,8 @@
 
     <!-- Step 2 -->
     <div id="fieldSetup" class="hidden mb-8">
-      <h2 class="text-lg font-semibold text-gray-700">Step 2: Add the details you want for each item</h2>
-      <p class="text-sm text-gray-500 mb-4">Each field is a column in your list — like "Name", "Price", or "Email".</p>
+      <h2 class="text-lg font-semibold text-white">Step 2: Add the details you want for each item</h2>
+      <p class="text-sm text-gray-400 mb-4">Each field is a column in your list — like "Name", "Price", or "Email".</p>
 
       <div id="fieldInputs" class="space-y-2 mb-4 flex flex-col"></div>
 
@@ -54,8 +55,8 @@
 
     <!-- Step 3 -->
     <div id="recordSection" class="hidden">
-      <h2 class="text-lg font-semibold text-gray-700">Step 3: Fill in your data</h2>
-      <p class="text-sm text-gray-500 mb-4">Add one item per row. You can add more rows if needed.</p>
+      <h2 class="text-lg font-semibold text-white">Step 3: Fill in your data</h2>
+      <p class="text-sm text-gray-400 mb-4">Add one item per row. You can add more rows if needed.</p>
 
       <div class="flex justify-start mb-4">
         <button onclick="editFields()"
@@ -77,12 +78,14 @@
       </div>
     </div>
   </div>
-<div class="mt-10">
-  <button onclick="clearSession()"
-    class="text-sm text-red-600 underline hover:text-red-800 block text-center w-full">
-    Clear everything and start over
-  </button>
-</div>
+
+  <!-- Reset button below box -->
+  <div class="mt-10 w-full max-w-5xl text-center">
+    <button onclick="clearSession()"
+      class="text-sm text-red-400 underline hover:text-red-600">
+      Clear everything and start over
+    </button>
+  </div>
 
   <script src="script.js"></script>
 </body>
