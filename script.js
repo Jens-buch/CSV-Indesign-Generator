@@ -4,7 +4,7 @@ function setItemType() {
   document.getElementById('itemType').disabled = true;
   document.getElementById('fieldSetup').classList.remove('hidden');
   const btn = document.getElementById('startBtn');
-  btn.textContent = 'Edit';
+  btn.textContent = 'Edit List Name';
   btn.onclick = editItemType;
 }
 
@@ -80,10 +80,7 @@ function lockFields() {
 function addRecord(data = {}) {
   const container = document.getElementById('records');
   const row = document.createElement('div');
-  row.className = 'record-row overflow-x-auto';
-
-  const inner = document.createElement('div');
-  inner.className = 'flex gap-4 min-w-max items-end';
+  row.className = 'flex gap-4 mb-4 items-end record-row';
 
   fields.forEach(field => {
     const isImageField = field.startsWith('@');
@@ -93,12 +90,12 @@ function addRecord(data = {}) {
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
-    input.className = 'w-48 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
+    input.className = 'bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
     input.value = data[field] || '';
 
     label.appendChild(input);
-    inner.appendChild(label);
+    row.appendChild(label);
   });
 
   const deleteBtn = document.createElement('button');
@@ -109,8 +106,7 @@ function addRecord(data = {}) {
     saveToLocalStorage();
   };
 
-  inner.appendChild(deleteBtn);
-  row.appendChild(inner);
+  row.appendChild(deleteBtn);
   container.appendChild(row);
   saveToLocalStorage();
 }
@@ -125,9 +121,8 @@ function exportCSV() {
   }
 
   recordDivs.forEach(div => {
-    const inner = div.querySelector('div'); // .inner container
     const row = fields.map(field => {
-      const input = inner.querySelector(`input[data-field='${field}']`);
+      const input = div.querySelector(`input[data-field='${field}']`);
       return (input?.value || '').replace(/\t/g, ' ').replace(/\r?\n/g, ' ');
     });
     rows.push(row);
@@ -174,10 +169,9 @@ function saveToLocalStorage() {
 
   const records = [];
   document.querySelectorAll('.record-row').forEach(row => {
-    const inner = row.querySelector('div');
     const record = {};
     fields.forEach(field => {
-      const input = inner.querySelector(`input[data-field='${field}']`);
+      const input = row.querySelector(`input[data-field='${field}']`);
       record[field] = input?.value || '';
     });
     records.push(record);
