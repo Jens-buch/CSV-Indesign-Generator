@@ -90,8 +90,8 @@ function addRecord(data = {}) {
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
-    input.className = 'border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
+    input.className = 'border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
     input.value = data[field] || '';
 
     label.appendChild(input);
@@ -109,6 +109,10 @@ function addRecord(data = {}) {
   row.appendChild(deleteBtn);
   container.appendChild(row);
   saveToLocalStorage();
+}
+
+function addRecordFromData(data) {
+  addRecord(data);
 }
 
 function exportCSV() {
@@ -225,7 +229,7 @@ function loadFromLocalStorage() {
 
   lockFields();
   document.getElementById('records').innerHTML = '';
-  data.records.forEach(record => addRecord(record));
+  data.records.forEach(record => addRecordFromData(record));
 }
 
 function clearSession() {
@@ -238,59 +242,75 @@ function handleCSVUpload(event) {
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = e => {
-    const text = e.target.result;
-    const lines = text.trim().split(/\r\n|\n/);
-    const header = lines[0].split(/\t|,/);
-    const isImageField = field => field.startsWith('@') || field.toLowerCase().includes('image');
+  reader.onload = (e) => {
+    const text = e.target.result.trim();
+    const lines = text.split(/\r?\n/);
+    if (lines.length < 2) {
+      alert('File must have a header and at least one data row.');
+      return;
+    }
 
-    // Reset everything
-    document.getElementById('fieldInputs').innerHTML = '';
-    header.forEach(name => {
+    const delimiter = lines[0].includes('\t') ? '\t' : ',';
+    const headers = lines[0].split(delimiter);
+
+    clearSession();
+
+    const fieldInputs = document.getElementById('fieldInputs');
+    headers.forEach(header => {
       const wrapper = document.createElement('div');
       wrapper.className = 'flex gap-2 items-center';
 
-      const input = document.createElement('input');
-      input.value = name.replace(/^@/, '');
-      input.className = 'flex-1 border border-gray-600 bg-gray-700 text-white px-3 py-2';
+      const nameInput = document.createElement('input');
+      nameInput.value = header.replace(/^@/, '');
+      nameInput.className = 'flex-1 border border-gray-300 rounded px-3 py-2';
 
-      const select = document.createElement('select');
-      select.className = 'border border-gray-600 bg-gray-700 text-white px-2 py-2 text-sm';
+      const typeSelect = document.createElement('select');
+      typeSelect.className = 'border border-gray-300 rounded px-2 py-2 text-sm';
       ['Text', 'Image path'].forEach(type => {
         const opt = document.createElement('option');
         opt.value = type;
         opt.textContent = type;
-        if (isImageField(name) && type === 'Image path') opt.selected = true;
-        select.appendChild(opt);
+        if (header.startsWith('@') && type === 'Image path') opt.selected = true;
+        typeSelect.appendChild(opt);
       });
 
-      const btn = document.createElement('button');
-      btn.textContent = 'Remove';
-      btn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
-      btn.onclick = () => wrapper.remove();
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Remove';
+      deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
+      deleteBtn.onclick = () => {
+        wrapper.remove();
+        saveToLocalStorage();
+      };
 
-      wrapper.appendChild(input);
-      wrapper.appendChild(select);
-      wrapper.appendChild(btn);
-      document.getElementById('fieldInputs').appendChild(wrapper);
+      wrapper.appendChild(nameInput);
+      wrapper.appendChild(typeSelect);
+      wrapper.appendChild(deleteBtn);
+      fieldInputs.appendChild(wrapper);
     });
 
     document.getElementById('itemType').value = file.name.replace(/\.[^/.]+$/, '');
     setItemType();
-
     lockFields();
     document.getElementById('records').innerHTML = '';
 
     for (let i = 1; i < lines.length; i++) {
-      const values = lines[i].split(/\t|,/);
+      const line = lines[i].trim();
+      if (!line) continue;
+
+      const values = line.split(delimiter);
       const record = {};
-      header.forEach((field, j) => {
-        record[field] = values[j] || '';
+      headers.forEach((header, index) => {
+        record[header] = values[index] || '';
       });
-      addRecord(record);
+
+      const isEmptyRow = Object.values(record).every(v => !v.trim());
+      if (!isEmptyRow) addRecordFromData(record);
     }
+
+    saveToLocalStorage();
   };
-  reader.readAsText(file, 'UTF-8');
+
+  reader.readAsText(file, 'utf-8');
 }
 
 window.addEventListener('DOMContentLoaded', loadFromLocalStorage);

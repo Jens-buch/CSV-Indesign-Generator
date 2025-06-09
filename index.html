@@ -15,11 +15,13 @@
     </p>
 
     <!-- Upload Option -->
-    <div class="mb-6">
-      <label class="block mb-2 text-sm font-medium text-gray-200">Upload a CSV file (optional)</label>
-      <input type="file" accept=".csv" onchange="handleCSVUpload(event)"
-        class="block w-full text-sm border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    </div>
+<div class="mb-6">
+  <label class="block mb-2 text-sm font-medium text-gray-200">Upload a CSV or TXT file (optional)</label>
+  <input type="file" accept=".csv,.txt"
+    onchange="handleCSVUpload(event)"
+    class="block w-full text-sm border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500" />
+</div>
+
 
     <!-- Step 1 -->
     <div class="space-y-4 mb-8">
