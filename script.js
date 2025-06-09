@@ -24,10 +24,10 @@ function addField() {
 
   const nameInput = document.createElement('input');
   nameInput.placeholder = 'Field name';
-  nameInput.className = 'flex-1 border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
+  nameInput.className = 'flex-1 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
 
   const typeSelect = document.createElement('select');
-  typeSelect.className = 'border border-gray-600 bg-gray-700 text-white rounded px-2 py-2 text-sm';
+  typeSelect.className = 'bg-black/40 text-white rounded px-5 py-4 text-sm';
   ['Text', 'Image path'].forEach(type => {
     const opt = document.createElement('option');
     opt.value = type;
@@ -37,7 +37,7 @@ function addField() {
 
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Remove';
-  deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
+  deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
   deleteBtn.onclick = () => {
     container.removeChild(wrapper);
     saveToLocalStorage();
@@ -85,13 +85,13 @@ function addRecord(data = {}) {
   fields.forEach(field => {
     const isImageField = field.startsWith('@');
     const label = document.createElement('label');
-    label.className = 'flex flex-col flex-1 text-sm font-medium text-gray-200';
+    label.className = 'flex flex-col flex-1 text-sm font-medium text-white';
     label.textContent = field.replace(/^@/, '');
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
+    input.className = 'bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
-    input.className = 'border border-gray-600 bg-gray-700 text-white placeholder-gray-400 rounded px-3 py-2';
     input.value = data[field] || '';
 
     label.appendChild(input);
@@ -109,10 +109,6 @@ function addRecord(data = {}) {
   row.appendChild(deleteBtn);
   container.appendChild(row);
   saveToLocalStorage();
-}
-
-function addRecordFromData(data) {
-  addRecord(data);
 }
 
 function exportCSV() {
@@ -201,10 +197,10 @@ function loadFromLocalStorage() {
 
     const nameInput = document.createElement('input');
     nameInput.value = name;
-    nameInput.className = 'flex-1 border border-gray-600 bg-gray-700 text-white rounded px-3 py-2';
+    nameInput.className = 'flex-1 bg-black/40 text-white rounded px-5 py-4';
 
     const typeSelect = document.createElement('select');
-    typeSelect.className = 'border border-gray-600 bg-gray-700 text-white rounded px-2 py-2 text-sm';
+    typeSelect.className = 'bg-black/40 text-white rounded px-5 py-4 text-sm';
     ['Text', 'Image path'].forEach(optType => {
       const opt = document.createElement('option');
       opt.value = optType;
@@ -215,7 +211,7 @@ function loadFromLocalStorage() {
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Remove';
-    deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
+    deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
     deleteBtn.onclick = () => {
       wrapper.remove();
       saveToLocalStorage();
@@ -229,88 +225,12 @@ function loadFromLocalStorage() {
 
   lockFields();
   document.getElementById('records').innerHTML = '';
-  data.records.forEach(record => addRecordFromData(record));
+  data.records.forEach(record => addRecord(record));
 }
 
 function clearSession() {
   localStorage.removeItem('csvBuilderData');
   location.reload();
-}
-
-function handleCSVUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const text = e.target.result.trim();
-    const lines = text.split(/\r?\n/);
-    if (lines.length < 2) {
-      alert('File must have a header and at least one data row.');
-      return;
-    }
-
-    const delimiter = lines[0].includes('\t') ? '\t' : ',';
-    const headers = lines[0].split(delimiter);
-
-    clearSession();
-
-    const fieldInputs = document.getElementById('fieldInputs');
-    headers.forEach(header => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'flex gap-2 items-center';
-
-      const nameInput = document.createElement('input');
-      nameInput.value = header.replace(/^@/, '');
-      nameInput.className = 'flex-1 border border-gray-300 rounded px-3 py-2';
-
-      const typeSelect = document.createElement('select');
-      typeSelect.className = 'border border-gray-300 rounded px-2 py-2 text-sm';
-      ['Text', 'Image path'].forEach(type => {
-        const opt = document.createElement('option');
-        opt.value = type;
-        opt.textContent = type;
-        if (header.startsWith('@') && type === 'Image path') opt.selected = true;
-        typeSelect.appendChild(opt);
-      });
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Remove';
-      deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700';
-      deleteBtn.onclick = () => {
-        wrapper.remove();
-        saveToLocalStorage();
-      };
-
-      wrapper.appendChild(nameInput);
-      wrapper.appendChild(typeSelect);
-      wrapper.appendChild(deleteBtn);
-      fieldInputs.appendChild(wrapper);
-    });
-
-    document.getElementById('itemType').value = file.name.replace(/\.[^/.]+$/, '');
-    setItemType();
-    lockFields();
-    document.getElementById('records').innerHTML = '';
-
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-
-      const values = line.split(delimiter);
-      const record = {};
-      headers.forEach((header, index) => {
-        record[header] = values[index] || '';
-      });
-
-      const isEmptyRow = Object.values(record).every(v => !v.trim());
-      if (!isEmptyRow) addRecordFromData(record);
-    }
-
-    saveToLocalStorage();
-  };
-
-  reader.readAsText(file, 'utf-8');
 }
 
 window.addEventListener('DOMContentLoaded', loadFromLocalStorage);
