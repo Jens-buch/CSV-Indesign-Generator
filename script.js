@@ -6,8 +6,7 @@ function setItemType() {
   const btn = document.getElementById('startBtn');
   btn.textContent = 'Edit List Name';
   btn.onclick = editItemType;
-
-  // ✅ Add one default empty field
+  //  Add one default empty field
   addField();
 }
 
