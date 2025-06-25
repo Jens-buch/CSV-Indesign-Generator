@@ -29,7 +29,7 @@ function addField() {
   nameInput.className = 'flex-1 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
 
   const typeSelect = document.createElement('select');
-  typeSelect.className = 'bg-black/40 text-white rounded px-5 py-4 text-sm';
+  typeSelect.className = 'custom-select bg-black/40 text-white rounded px-5 py-4 text-sm';
   ['Text', 'Image path'].forEach(type => {
     const opt = document.createElement('option');
     opt.value = type;
@@ -202,7 +202,7 @@ function loadFromLocalStorage() {
     nameInput.className = 'flex-1 bg-black/40 text-white rounded px-5 py-4';
 
     const typeSelect = document.createElement('select');
-    typeSelect.className = 'bg-black/40 text-white rounded px-5 py-4 text-sm';
+    typeSelect.className = 'custom-select bg-black/40 text-white rounded px-5 py-4 text-sm';
     ['Text', 'Image path'].forEach(optType => {
       const opt = document.createElement('option');
       opt.value = optType;
