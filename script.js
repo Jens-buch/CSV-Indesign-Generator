@@ -26,10 +26,10 @@ function addField() {
 
   const nameInput = document.createElement('input');
   nameInput.placeholder = 'Field name';
-  nameInput.className = 'flex-1 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
+  nameInput.className = 'flex-1 bg-[#000] text-white placeholder-gray-400 rounded px-5 py-4';
 
   const typeSelect = document.createElement('select');
-  typeSelect.className = 'custom-select bg-black/40 text-white rounded px-5 py-4 text-sm';
+  typeSelect.className = 'custom-select bg-[#000] text-white rounded px-5 py-4 text-sm';
   ['Text', 'Image path'].forEach(type => {
     const opt = document.createElement('option');
     opt.value = type;
@@ -92,7 +92,7 @@ function addRecord(data = {}) {
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
-    input.className = 'bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4';
+    input.className = 'bg-[#000] text-white placeholder-gray-400 rounded px-5 py-4';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
     input.value = data[field] || '';
 
@@ -199,10 +199,10 @@ function loadFromLocalStorage() {
 
     const nameInput = document.createElement('input');
     nameInput.value = name;
-    nameInput.className = 'flex-1 bg-black/40 text-white rounded px-5 py-4';
+    nameInput.className = 'flex-1 bg-[#000] text-white rounded px-5 py-4';
 
     const typeSelect = document.createElement('select');
-    typeSelect.className = 'custom-select bg-black/40 text-white rounded px-5 py-4 text-sm';
+    typeSelect.className = 'custom-select bg-[#000] text-white rounded px-5 py-4 text-sm';
     ['Text', 'Image path'].forEach(optType => {
       const opt = document.createElement('option');
       opt.value = optType;
