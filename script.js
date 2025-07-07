@@ -26,10 +26,10 @@ function addField() {
 
   const nameInput = document.createElement('input');
   nameInput.placeholder = 'Field name';
-  nameInput.className = 'flex-1 bg-[#000] text-white placeholder-gray-400 rounded px-5 py-4';
+  nameInput.className = 'flex-1 bg-white text-gray-900 placeholder-gray-400 rounded px-5 py-4';
 
   const typeSelect = document.createElement('select');
-  typeSelect.className = 'custom-select bg-[#000] text-white rounded px-5 py-4 text-sm';
+  typeSelect.className = 'custom-select bg-white text-gray-900 rounded px-5 py-4 text-sm';
   ['Text', 'Image path'].forEach(type => {
     const opt = document.createElement('option');
     opt.value = type;
@@ -39,7 +39,7 @@ function addField() {
 
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Remove';
-  deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
+  deleteBtn.className = 'text-sm bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200';
   deleteBtn.onclick = () => {
     container.removeChild(wrapper);
     saveToLocalStorage();
@@ -87,12 +87,12 @@ function addRecord(data = {}) {
   fields.forEach(field => {
     const isImageField = field.startsWith('@');
     const label = document.createElement('label');
-    label.className = 'flex flex-col flex-1 text-sm font-medium text-white';
+    label.className = 'flex flex-col flex-1 text-sm font-medium text-gray-900';
     label.textContent = field.replace(/^@/, '');
 
     const input = document.createElement('input');
     input.setAttribute('data-field', field);
-    input.className = 'bg-[#000] text-white placeholder-gray-400 rounded px-5 py-4';
+    input.className = 'bg-white text-gray-900 placeholder-gray-400 rounded px-5 py-4';
     input.placeholder = isImageField ? 'e.g. Images/photo.jpg' : '';
     input.value = data[field] || '';
 
@@ -102,7 +102,7 @@ function addRecord(data = {}) {
 
   const deleteBtn = document.createElement('button');
   deleteBtn.textContent = 'Remove';
-  deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
+  deleteBtn.className = 'text-sm bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200';
   deleteBtn.onclick = () => {
     container.removeChild(row);
     saveToLocalStorage();
@@ -199,10 +199,10 @@ function loadFromLocalStorage() {
 
     const nameInput = document.createElement('input');
     nameInput.value = name;
-    nameInput.className = 'flex-1 bg-[#000] text-white rounded px-5 py-4';
+    nameInput.className = 'flex-1 bg-white text-gray-900 rounded px-5 py-4';
 
     const typeSelect = document.createElement('select');
-    typeSelect.className = 'custom-select bg-[#000] text-white rounded px-5 py-4 text-sm';
+    typeSelect.className = 'custom-select bg-white text-gray-900 rounded px-5 py-4 text-sm';
     ['Text', 'Image path'].forEach(optType => {
       const opt = document.createElement('option');
       opt.value = optType;
@@ -213,7 +213,7 @@ function loadFromLocalStorage() {
 
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Remove';
-    deleteBtn.className = 'text-sm bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700';
+    deleteBtn.className = 'text-sm bg-red-100 text-red-700 px-3 py-2 rounded hover:bg-red-200';
     deleteBtn.onclick = () => {
       wrapper.remove();
       saveToLocalStorage();

@@ -6,180 +6,237 @@
   <title>Data List Builder for InDesign</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css" />
-
+  <style>
+    html { scroll-behavior: smooth; }
+    @media (max-width: 1023px) {
+      .sidebar-mobile-hidden {
+        transform: translateX(-100%);
+      }
+      .sidebar-mobile-visible {
+        transform: translateX(0);
+      }
+    }
+  </style>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center p-10 space-y-10">
+<body class="bg-gray-50 text-gray-900 min-h-screen flex">
 
-  <!-- Top Banner -->
-  <header class="w-full bg-gradient-to-b from-black via-black/80 to-transparent pt-12 pb-10 flex flex-col items-center">
-    <div class="w-full max-w-[86rem] flex flex-col md:flex-row items-center justify-between gap-20 px-4 text-center md:text-left">
-      <!-- Text Section -->
-      <div class="flex-[0.8]">
-      <h1 class="pageHeading text-5xl sm:text-7xl md:text-[4rem] leading-tight md:leading-[4.2rem] font-semibold text-white mb-6">
-        Data List Builder for InDesign automation
-      </h1>
-      <p class="text-lg text-[#bbb] mb-6">
-        Built for handoff — Project managers create the data, designers merge it in InDesign. Simple as that.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
-        <a href="#ready-to-start" class="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition-colors text-lg">
-        Build a CSV
-        </a>
-        <a href="#guides-for-indesign" class="bg-white/10 text-white px-6 py-3 rounded font-semibold hover:bg-white/20 transition-colors text-lg border border-white/20">
-        How to get started
-        </a>
-      </div>
-      </div>
-      <!-- Video Section -->
-      <div class="flex-1 flex flex-col items-center w-full md:w-auto">
-        <div class="w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-white/10 max-w-full min-h-[320px]">
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://www.youtube.com/embed/i3EJhHiZIaE?si=SEsl860SmRHmIc4D"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            class="w-full h-full"
-          ></iframe>
+  <!-- Sidebar -->
+  <aside id="sidebar"
+    class="w-64 bg-white flex flex-col h-screen fixed left-0 top-0 z-40 border-r border-gray-200 transition-transform duration-300
+    sidebar-mobile-hidden lg:translate-x-0 lg:relative lg:flex lg:w-64">
+    <div class="flex items-center gap-2 px-6 py-6 border-b border-gray-200">
+      <span class="text-2xl font-bold text-blue-600">CSV Builder</span>
+    </div>
+    <nav class="flex-1 flex flex-col gap-2 px-4 py-6">
+      <a href="#" onclick="showPage('dashboardPage');closeSidebarMobile()" class="flex items-center gap-2 px-3 py-2 rounded text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition" id="dashboardLink">
+        <span>Dashboard</span>
+      </a>
+      <a href="#" onclick="showPage('csvPage');closeSidebarMobile()" class="flex items-center gap-2 px-3 py-2 rounded text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition" id="csvLink">
+        <span>Build a CSV</span>
+      </a>
+      <a href="#" onclick="showPage('guidesPage');closeSidebarMobile()" class="flex items-center gap-2 px-3 py-2 rounded text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition" id="guidesLink">
+        <span>Guides for InDesign</span>
+      </a>
+    </nav>
+    <div class="px-6 py-4 border-t border-gray-200">
+      <button onclick="clearSession()" class="text-sm text-red-600 underline hover:text-red-800">Clear everything and start over</button>
+    </div>
+  </aside>
+
+  <!-- Overlay for sidebar on mobile -->
+  <div id="sidebarOverlay" onclick="closeSidebarMobile()"
+    class="fixed inset-0 bg-black/30 z-30 hidden lg:hidden"></div>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col min-h-screen">
+
+    <!-- Top Bar -->
+    <header class="w-full bg-white/80 border-b border-gray-200 px-4 sm:px-6 md:px-10 lg:px-10 py-4 sm:py-6 lg:py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <button id="sidebarToggle" onclick="toggleSidebarMobile()" class="lg:hidden text-gray-700 focus:outline-none mr-2" aria-label="Open menu">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Data List Builder for InDesign</h1>
+          <p class="text-gray-500 mt-1">Built for handoff — Project managers create the data, designers merge it in InDesign.</p>
         </div>
-        <h3 class="text-1xl font-semibold text-white mb-4">Watch a Quick Demo</h3>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a href="#" onclick="showPage('csvPage')" class="bg-blue-600 text-white px-4 sm:px-5 py-2 rounded font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base">Build a CSV</a>
+        <a href="#" onclick="showPage('guidesPage')" class="bg-blue-50 text-blue-700 px-4 sm:px-5 py-2 rounded font-semibold hover:bg-blue-100 transition-colors text-sm sm:text-base border border-blue-100">How to get started</a>
+      </div>
+    </header>
+
+    <!-- Dashboard Page -->
+    <main id="dashboardPage" class="page flex-1 flex flex-col gap-8 px-4 sm:px-6 md:px-10 lg:px-10 py-4 sm:py-8 lg:py-8 bg-gray-50">
+      <!-- Welcome/Intro fills all available space -->
+      <section class="w-full flex-1 flex flex-col justify-center items-center h-full">
+        <div class="bg-white rounded-lg p-4 sm:p-8 flex flex-col items-center border border-gray-200 h-full w-full flex-1 justify-center">
+          <h3 class="text-2xl font-semibold text-gray-900 mb-4">Welcome to the Dashboard</h3>
+          <p class="text-gray-500 text-center mb-4">Get started by building a CSV or reading the guides for InDesign data merge.</p>
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full justify-center">
+            <a href="#" onclick="showPage('csvPage')" class="bg-blue-600 text-white px-5 py-2 rounded font-semibold hover:bg-blue-700 transition-colors text-base text-center">Build a CSV</a>
+            <a href="#" onclick="showPage('guidesPage')" class="bg-blue-50 text-blue-700 px-5 py-2 rounded font-semibold hover:bg-blue-100 transition-colors text-base border border-blue-100 text-center">Guides</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- CSV Builder Page -->
+    <main id="csvPage" class="page flex-1 flex flex-col gap-8 px-4 sm:px-6 md:px-10 lg:px-10 py-4 sm:py-8 lg:py-8 bg-gray-50 hidden">
+      <section class="w-full flex flex-col gap-8">
+        <!-- Upload -->
+        <div id="ready-to-start" class="bg-white rounded-lg p-4 sm:p-8 flex flex-col items-center border border-gray-200">
+          <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Ready to start?</h3>
+          <label for="fileUpload" class="text-center text-base font-medium text-gray-700 mb-2">
+            Upload a CSV or TXT file <span class="text-gray-400">(optional)</span>
+          </label>
+          <div class="relative group w-full max-w-xs mb-4">
+            <input
+              type="file"
+              id="fileUpload"
+              accept=".csv,.txt"
+              onchange="handleCSVUpload(event)"
+              class="block w-full text-sm text-gray-700
+              file:mr-4 file:py-3 file:px-6
+              file:rounded-md file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100
+              cursor-pointer
+              bg-gray-100 rounded-lg
+              focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Steps Card -->
+        <div class="bg-white rounded-lg p-4 sm:p-8 w-full border border-gray-200">
+          <h3 class="text-xl sm:text-2xl font-semibold text-gray-900 mb-8 text-center">Build your own</h3>
+
+          <!-- Step 1 -->
+          <div class="space-y-4 mb-8">
+            <h2 class="text-base font-semibold text-gray-900 text-center">Step 1: Give your list a name</h2>
+            <p class="text-sm text-gray-500 mb-2 text-center">Type a name that describes your items, e.g., "Products", "Destinations", or "Event Sessions".</p>
+            <input type="text" id="itemType" placeholder="e.g. Product"
+              class="mt-1 w-full border border-gray-200 bg-white text-gray-900 placeholder-gray-400 rounded px-5 py-4 focus:outline-none focus:ring focus:border-blue-400" />
+            <button id="startBtn" onclick="setItemType()"
+              class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-2">Next</button>
+          </div>
+
+          <!-- Step 2 -->
+          <div id="fieldSetup" class="hidden mb-8 space-y-2">
+            <h2 class="text-base font-semibold text-gray-900 text-center">Step 2: List the types of data you’ll enter for every variation</h2>
+            <p class="text-sm text-gray-500 mb-2 text-center">Each field is a column in your list — like "Headline", "Price", or "Image path".</p>
+            <div id="fieldInputs" class="space-y-2 mb-4 flex flex-col"></div>
+            <div class="flex gap-2 mb-4">
+              <button onclick="addField()"
+                class="flex items-center gap-2 text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded px-3 py-2 text-sm font-medium transition-colors">
+                <span class="text-lg">+</span> Add a Field
+              </button>
+            </div>
+            <div class="mt-6 flex justify-center">
+              <button onclick="lockFields()"
+                class="bg-indigo-600 text-white px-6 py-3 text-lg font-semibold rounded shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                I’m Done — Let’s Add Data
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div id="recordSection" class="hidden">
+            <h2 class="text-base font-semibold text-gray-900 text-center">Step 3: Fill in your data for your variations</h2>
+            <p class="text-xs text-gray-500 mb-2 text-center">Add one item per row. You can add more rows if needed.</p>
+            <div class="flex justify-center mb-4">
+              <button onclick="editFields()"
+                class="flex items-center gap-2 text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded px-3 py-2 text-sm font-medium transition-colors">
+                ← Back to Fields
+              </button>
+            </div>
+            <div id="records" class="space-y-3 mb-4 overflow-x-auto"></div>
+            <div class="flex gap-2 mb-4">
+              <button onclick="addRecord()"
+                class="flex items-center gap-2 text-gray-700 hover:text-gray-900 border border-gray-200 hover:border-gray-400 rounded px-3 py-2 text-sm font-medium transition-colors">
+                <span class="text-lg">+</span>Add Another Item
+              </button>
+            </div>
+            <div class="mt-6 flex justify-center">
+              <button onclick="exportCSV()"
+                class="bg-blue-600 text-white px-6 py-3 text-lg font-semibold rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                Download List as CSV
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Guides Page -->
+    <main id="guidesPage" class="page flex-1 flex flex-col gap-8 px-4 sm:px-6 md:px-10 lg:px-10 py-4 sm:py-8 lg:py-8 bg-gray-50 hidden">
+      <section class="w-full flex flex-col items-center gap-4 text-center">
+        <h3 class="text-2xl sm:text-3xl font-semibold text-gray-900">Guides for InDesign</h3>
+        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 w-full">
+          <button onclick="openGuide('existing')" class="text-sm text-gray-700 hover:text-gray-900 border border-gray-200 rounded px-4 py-2 w-full sm:w-auto">
+            I already have an InDesign document
+          </button>
+          <button onclick="openGuide('new')" class="text-sm text-gray-700 hover:text-gray-900 border border-gray-200 rounded px-4 py-2 w-full sm:w-auto">
+            I haven’t created my InDesign document yet
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Guide Panel -->
+    <div id="guidePanel"
+      class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-white text-gray-900 p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-semibold">How to use in InDesign</h2>
+        <button onclick="closeGuide()" class="text-gray-400 hover:text-gray-900 text-2xl">&times;</button>
+      </div>
+      <div id="guideContent" class="space-y-4 text-sm text-gray-700">
+        <!-- JS inserts content here -->
       </div>
     </div>
-  </header>
 
+    <script>
+      // Simple SPA navigation
+      function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(el => el.classList.add('hidden'));
+        document.getElementById(pageId).classList.remove('hidden');
+        // Optionally highlight active menu
+        document.querySelectorAll('aside nav a').forEach(link => link.classList.remove('bg-gray-800', 'text-white'));
+        if (pageId === 'dashboardPage') document.getElementById('dashboardLink').classList.add('bg-gray-800', 'text-white');
+        if (pageId === 'csvPage') document.getElementById('csvLink').classList.add('bg-gray-800', 'text-white');
+        if (pageId === 'guidesPage') document.getElementById('guidesLink').classList.add('bg-gray-800', 'text-white');
+      }
+      // Show dashboard by default
+      showPage('dashboardPage');
 
-    <!-- Upload -->
-    <div id="ready-to-start" class="max-w-5xl w-full flex flex-col items-center">
-        <h3 class="text-4xl font-semibold text-white mb-6">Ready to start?</h3>
-      <label for="fileUpload" class="text-center text-lg font-medium text-gray-300 mb-4">
-        Upload a CSV or TXT file <span class="text-gray-500">(optional)</span>
-      </label>
-      <div class="relative group w-full max-w-sm">
-        <input
-        type="file"
-        id="fileUpload"
-        accept=".csv,.txt"
-        onchange="handleCSVUpload(event)"
-        class="block w-full text-sm text-gray-300
-        file:mr-4 file:py-3 file:px-6
-        file:rounded-md file:border-0
-        file:text-sm file:font-semibold
-        file:bg-white file:text-black
-        hover:file:bg-white/70
-        cursor-pointer
-        bg-gray-800 rounded-lg
-        focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-        />
-      </div>
-    </div>
+      // Sidebar mobile toggle
+      function toggleSidebarMobile() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.toggle('sidebar-mobile-hidden');
+        sidebar.classList.toggle('sidebar-mobile-visible');
+        overlay.style.display = sidebar.classList.contains('sidebar-mobile-visible') ? 'block' : 'none';
+      }
+      function closeSidebarMobile() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        sidebar.classList.remove('sidebar-mobile-visible');
+        sidebar.classList.add('sidebar-mobile-hidden');
+        overlay.style.display = 'none';
+      }
+      // Hide sidebar on resize if desktop
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+          closeSidebarMobile();
+        }
+      });
+    </script>
+    <script src="script.js"></script>
   </div>
-
-  <!-- Steps -->
-  <div class="bg-white/10 rounded-lg p-8 w-full max-w-5xl shadow-xl">
-    <h3 class="text-4xl font-semibold text-white mb-10 text-center">Build your own</h3>
-
-    <!-- Step 1 -->
-    <div class="space-y-4 mb-8">
-      <h2 class="text-lg font-semibold text-white text-center">Step 1: Give your list a name</h2>
-      <p class="text-base text-gray-400 mb-4 text-center">Type a name that describes your items, e.g., "Products", "Destinations", or "Event Sessions".</p>
-      <input type="text" id="itemType" placeholder="e.g. Product"
-      class="mt-1 w-full border border-white/10 bg-black/40 text-white placeholder-gray-400 rounded px-5 py-4 focus:outline-none focus:ring focus:border-blue-400" />
-      <button id="startBtn" onclick="setItemType()"
-      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ">Next</button>
-    </div>
-
-    <!-- Step 2 -->
-    <div id="fieldSetup" class="hidden mb-8 space-y-2">
-      <h2 class="text-lg font-semibold text-white text-center">Step 2: List the types of data you’ll enter for every variation</h2>
-      <p class="text-base text-gray-400 mb-4 text-center">Each field is a column in your list — like "Headline", "Price", or "Image path".</p>
-      <div id="fieldInputs" class="space-y-2 mb-4 flex flex-col"></div>
-      <div class="flex gap-2 mb-4">
-       <button onclick="addField()"
-       class="flex items-center gap-2 text-white/70 hover:text-white border border-white/10 hover:border-white/30 rounded px-3 py-2 text-sm font-medium transition-colors">
-       <span class="text-lg">+</span> Add a Field
-     </button>
-
-
-   </div>
-   <div class="mt-6 flex justify-center">
-    <button onclick="lockFields()"
-    class="bg-indigo-600 text-white px-6 py-3 text-lg font-semibold rounded shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400">
-    I’m Done — Let’s Add Data
-  </button>
-</div>
-</div>
-
-
-<!-- Step 3 -->
-<div id="recordSection" class="hidden">
-  <h2 class="text-lg font-semibold text-white text-center">Step 3: Fill in your data for your variations</h2>
-  <p class="text-sm text-gray-400 mb-4 text-center">Add one item per row. You can add more rows if needed.</p>
-
-  <div class="flex justify-center mb-4">
-    <button onclick="editFields()"
-    class="flex items-center gap-2 text-white/70 hover:text-white border border-white/10 hover:border-white/30 rounded px-3 py-2 text-sm font-medium transition-colors">
-    ← Back to Fields
-  </button>
-</div>
-
-
-<!-- ✅ Scrollable container for input rows -->
-<div id="records" class="space-y-3 mb-4 overflow-x-auto">
-  <!-- JS will insert .record-row inside here -->
-</div>
-
-<div class="flex gap-2 mb-4">
-  <button onclick="addRecord()"
-  class="flex items-center gap-2 text-white/70 hover:text-white border border-white/10 hover:border-white/30 rounded px-3 py-2 text-sm font-medium transition-colors"><span class="text-lg">+</span>Add Another Item</button>
-</div>
-
-<div class="mt-6 flex justify-center">
-  <button onclick="exportCSV()"
-  class="bg-blue-600 text-white px-6 py-3 text-lg font-semibold rounded shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
-  Download List as CSV
-</button>
-</div>
-</div>
-
-</div>
-
-<!-- Reset button below box -->
-<div class="mt-10 w-full max-w-5xl text-center">
-  <button onclick="clearSession()"
-  class="text-sm text-red-400 underline hover:text-red-600">
-  Clear everything and start over
-</button>
-</div>
-  <!-- Guides Section -->
-<div id="guides-for-indesign" class="flex flex-col items-center gap-4 mt-12 text-center">
-  <h3 class="text-4xl font-semibold text-white">Guides for InDesign</h3>
-
-  <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
-    <button onclick="openGuide('existing')" class="text-sm text-white/70 hover:text-white border border-white/20 rounded px-4 py-2">
-      I already have an InDesign document
-    </button>
-    <button onclick="openGuide('new')" class="text-sm text-white/70 hover:text-white border border-white/20 rounded px-4 py-2">
-      I haven’t created my InDesign document yet
-    </button>
-  </div>
-</div>
-
-<!-- Guide to indesign - Panels -->
-<div id="guidePanel"
-  class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-black text-white p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-lg font-semibold">How to use in InDesign</h2>
-    <button onclick="closeGuide()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
-  </div>
-  <div id="guideContent" class="space-y-4 text-sm text-white/80">
-    <!-- JS inserts content here -->
-  </div>
-</div>
-
-
-
-<script src="script.js"></script>
 </body>
 </html>
