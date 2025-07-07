@@ -15,38 +15,85 @@
     <div class="w-full max-w-[86rem] flex flex-col md:flex-row items-center justify-between gap-20 px-4 text-center md:text-left">
       <!-- Text Section -->
       <div class="flex-[0.8]">
-      <h1 class="pageHeading text-5xl sm:text-7xl md:text-[4rem] leading-tight md:leading-[4.2rem] font-semibold text-white mb-6">
-        Data List Builder for InDesign automation
-      </h1>
-      <p class="text-lg text-[#bbb] mb-6">
-        Built for handoff — Project managers create the data, designers merge it in InDesign. Simple as that.
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
-        <a href="#ready-to-start" class="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition-colors text-lg">
-        Build CSV
-        </a>
-        <a href="#guides-for-indesign" class="bg-white/10 text-white px-6 py-3 rounded font-semibold hover:bg-white/20 transition-colors text-lg border border-white/20">
-        How to get started
-        </a>
-      </div>
+        <h1 class="pageHeading text-5xl sm:text-7xl md:text-[4rem] leading-tight md:leading-[4.2rem] font-semibold text-white mb-6">
+          Data List Builder for InDesign automation
+        </h1>
+        <p class="text-lg text-[#bbb] mb-6">
+          Built for handoff — Project managers create the data, designers merge it in InDesign. Simple as that.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mt-8 justify-center md:justify-start">
+          <a href="#ready-to-start" class="bg-blue-600 text-white px-6 py-3 rounded font-semibold hover:bg-blue-700 transition-colors text-lg">
+            Build CSV
+          </a>
+          <a href="#guides-for-indesign" class="bg-white/10 text-white px-6 py-3 rounded font-semibold hover:bg-white/20 transition-colors text-lg border border-white/20">
+            How to get started
+          </a>
+        </div>
       </div>
       <!-- Video Section -->
       <div class="flex-1 flex flex-col items-center w-full md:w-auto">
-        <div class="w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-white/10 max-w-full min-h-[320px]">
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://www.youtube.com/embed/i3EJhHiZIaE?si=SEsl860SmRHmIc4D"
-            title="YouTube video player"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            class="w-full h-full"
-          ></iframe>
+        <div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg border border-white/10 max-w-full min-h-[320px] cursor-pointer group"
+             onclick="openVideoModal()"
+             title="Click to watch in large view">
+          <img
+            src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
+            alt="Demo thumbnail"
+            class="w-full h-full object-cover pointer-events-none group-hover:opacity-80 transition"
+            draggable="false"
+          />
+          <!-- Overlay play icon -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <svg class="w-20 h-20 text-white/80 drop-shadow-lg" fill="currentColor" viewBox="0 0 84 84">
+              <circle cx="42" cy="42" r="42" fill="black" fill-opacity="0.5"/>
+              <polygon points="34,26 62,42 34,58" fill="white"/>
+            </svg>
+          </div>
         </div>
         <h3 class="text-1xl font-semibold text-white mb-4">Watch a Quick Demo</h3>
       </div>
     </div>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+      <div class="relative bg-black rounded-lg shadow-lg max-w-3xl w-full p-4">
+        <button onclick="closeVideoModal()" class="absolute top-2 right-2 text-white text-3xl hover:text-red-400">&times;</button>
+        <div class="aspect-video w-full">
+          <iframe
+            id="modalVideo"
+            width="100%"
+            height="100%"
+            src=""
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="w-full h-full rounded-lg"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+    <script>
+      function openVideoModal() {
+        const modal = document.getElementById('videoModal');
+        const video = document.getElementById('modalVideo');
+        // Autoplay when opening
+        video.src = "https://www.youtube.com/embed/i3EJhHiZIaE?si=SEsl860SmRHmIc4D&autoplay=1";
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeVideoModal() {
+        const modal = document.getElementById('videoModal');
+        const video = document.getElementById('modalVideo');
+        modal.classList.add('hidden');
+        // Stop video playback
+        video.src = "";
+        document.body.style.overflow = '';
+      }
+      // Optional: Close modal on ESC
+      document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") closeVideoModal();
+      });
+    </script>
   </header>
 
 
@@ -168,7 +215,7 @@
 
 <!-- Guide to indesign - Panels -->
 <div id="guidePanel"
-  class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-black text-white p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+  class="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-black text-white p-6 shadow-lg transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto mt-0">
   <div class="flex justify-between items-center mb-6">
     <h2 class="text-lg font-semibold">How to use in InDesign</h2>
     <button onclick="closeGuide()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
